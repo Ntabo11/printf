@@ -14,8 +14,6 @@ int _printf(const char *format, ...)
 	va_list args;
 	char c;
 	char *s;
-	int d;
-	unsigned int i;
 
 	va_start(args, format);
 	while (*format)
@@ -43,20 +41,6 @@ int _printf(const char *format, ...)
 					write(1, "%", 1);
 					count++;
 					break;
-				case 'd':
-					d = va_arg(args, int);
-					if(d < 0)
-					{
-						d = -d;
-						write(1, "-", 1);
-						count++;
-					}
-					print_numberd(d, &count);
-					break;
-				case 'i':
-					i = va_arg(args, unsigned int);
-					print_hex(i, &count);
-					break;
 			}
 		}
 		else
@@ -69,43 +53,4 @@ int _printf(const char *format, ...)
 
 	va_end(args);
 	return (count);
-}
-/**
- * print_numb - print an int
- * @n: the integer to be printed
- * @count: *p to the count of printed char
- */
-void print_numberd(int n, int *count)
-{
-	char c;
-
-	if(n < 0)
-	{
-		write(1, "-", 1);
-		n = -n;
-		(*count)++;
-	}
-	if (n / 10 != 0)
-	{
-		print_numberd(n / 10, count);
-	}
-	c = n % 10 + '0';
-	write(1, &c, 1);
-	(*count)++;
-}
-void print_hex(unsigned int n, int *count)
-{
-	char digit;
-
-	if (n / 16 != 0)
-		print_hex(n / 16, count);
-
-	digit = n % 16;
-
-	if (digit < 10)
-		digit += '0';
-	else
-		digit += 'a' - 10;
-	write(1, &digit, 1);
-	(*count)++;
 }
