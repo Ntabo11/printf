@@ -12,7 +12,7 @@ int _printf(const char *format, ...)
 {
 	va_list args_list;
 	int count = 0;
-	char *rod, c;
+	char *str, c;
 
 	va_start(args_list, format);
 
@@ -28,20 +28,24 @@ int _printf(const char *format, ...)
 			}
 			else if (*format == 's')
 			{
-				rod = va_arg(args_list, char *);
-				while (*rod)
+				str = va_arg(args_list, char *);
+				while (*str)
 				{
-					count += write(1, rod++, 1);
+					count += write(1, str++, 1);
 				}
 			}
 			else if (*format == '%')
 			{
 				count += write(1, "%", 1);
 			}
+			else
+			{
+				count += write(1, "%", 1);
+				count += write(1, format, 1);
+			}
 		}
 		else
 		{
-			count += write(1, "%", 1); /*Print unknown specifier*/
 			count += write(1, format, 1);
 		}
 		format++;
