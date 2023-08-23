@@ -15,6 +15,8 @@ int _printf(const char *format, ...)
 {
 	va_list args_list;
 	int count = 0;
+	char buffer[BUFSIZ];
+	int buff_ind = 0;
 	char *str, c;
 
 	va_start(args_list, format);
@@ -27,33 +29,60 @@ int _printf(const char *format, ...)
 			if (*format == 'c')
 			{
 				c = va_arg(args_list, int);
-				count += write(1, &c, 1);
+				if (buff_ind == BUFSIZ)
+				{
+					print_buffer(buffer, & buff_ind);
+				}
+
+				buffer[buff_ind++] = c;
 			}
 			else if (*format == 's')
 			{
 				str = va_arg(args_list, char *);
 				while (*str)
 				{
-					count += write(1, str++, 1);
+					if (buff_ind == BUFSIZ)
+					{
+						print_buffer(buffer, & buff_ind);
+					}
+					buffer[buff_ind++] = *str++;
 				}
 			}
 			else if (*format == '%')
 			{
-				count += write(1, "%", 1);
+				if (buff_ind == BUFSIZ)
+				{
+					print_buffer(buffer, &buff_ind);
+				}
+				buffer[buff_ind++] = '%';
 			}
 			else
 			{
-				count += write(1, "%", 1);
-				count += write(1, format, 1);
+				if (buff_ind == BUFSIZ)
+				{
+					print_buffer(buffer, & buff_ind);
+				}
+				buffer[buff_ind++] = '%';
+				if (buff_ind == BUFSIZ)
+				{
+					print_buffer(buffer, & buff_ind);
+				}
+				buffer[buff_ind++] = *format;
 			}
 		}
 		else
 		{
-			count += write(1, format, 1);
+			if (buff_ind == BUFSIZ)
+			{
+				print_buffer(buffer, & buff_ind);
+			}
+			buffer[buff_ind++] = *format;
 		}
 		format++;
 	}
 	va_end(args_list);
+	print_buffer(buffer, & buff_ind);
+	
 	return (count);
 }
 /**
@@ -114,18 +143,6 @@ int _print(const char *format, ...)
 	va_end(list);
 	return (printed_chars);
 }
-/**
- * print_buffer - prints the cont of the buffer id exist
- * @buffer: array of chrs
- * @buff_in: index at which to add next char, represents the length
- */
-void print_buffer(char buffer[], int *buff_ind)
-{
-	if (*buff_ind > 0)
-		write(1, & buffer[0], *buff_ind);
-	*buff_ind = 0;
-}
-
 #define S_LONG 1
 #define S_SHORT 2
 #define F_PLUS 1
@@ -258,9 +275,10 @@ int handle_print(const char *fmt, int *ind, va_list list, char buffer[],
 {
 	int i, unknow_len = 0, printed_chars = -1;
 	fmt_t fmt_types[] = {
-		{'c', print_char}, {'s', print_string},{'%', print_percent},
+		{'c', print_char}, {'s', print_string}, {'%', print_percent},
 		{'i', print_int}, {'d', print_int}, {'b', print_binary},
-		{'u', print_unsigned}, {'o', print_octal}, {'x', print_non_printable},
+		{'u', print_unsigned}, {'o', print_octal}, {'x', print_hexadecimal},
+		{'X', print_hexa_upper}, {'p', print_pointer}, {'S', print_non_printable},
 		{'X', print_reverse}, {'R', print_rot13string}, {'\0', NULL}
 	};
 	for (i = 0; fmt_types[i].fmt != '\0'; i++)

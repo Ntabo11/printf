@@ -7,7 +7,7 @@ int _print(const char *format, ...);
 int _putchar(char c);
 int handle_print(const char *fmt, int *ind, va_list list, char buffer[],
                 int flags, int width, int precision, int size);
-void print_buffer(char buffer[], int *buff_ind);
+void print_buffer(const char *format, ...);
 int number_function(int is_negative, int ind, char buffer[],
                 int flags, int width, int prec, int F_MINUS,
                 int F_ZERO, char F_PLUS, char F_SPACE);

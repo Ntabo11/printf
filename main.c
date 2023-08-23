@@ -1,4 +1,5 @@
 #include <limits.h>
+#include <unistd.h>
 #include <stdio.h>
 #include "main.h"
 /**
@@ -39,4 +40,36 @@ int main(void)
 	_printf("Unknown:[%r]\n");
 	printf("Unknown:[%r]\n");
 	return (0);
+}
+/**
+ * print_buffer - prints the cont of the buffer id exist
+ * @buffer: array of chrs
+ * @buff_in: index at which to add next char, represents the length
+ * @format: The format string.
+ * @...: Additional arguments based on format.
+ * This function proides a buffered version of printf-lie formatted output.
+ * It accumulates the formatted content in a local and writes it to
+ * the standard output in a single operation.
+ */
+void print_buffer1(const char *buffer[BUFSIZ], int *buff_ind)
+{
+	
+	if (*buff_ind > 0)
+	{
+		write(1, & buffer[0], *buff_ind);
+		*buff_ind = 0;
+	}
+}
+/**
+ * main - Entry point of the program.
+ *
+ * This function demonstrates the usgae of the buffered_printf function
+ * Return: Always 0.
+ */
+int main_buffer(void)
+{
+        print_buffer("This is a %s example with %d formatted %s.\n",
+                        "buffered", 123, "output");
+        print_buffer("An unknown specifier: %p\n", (void *)12345);
+        return (0);
 }
