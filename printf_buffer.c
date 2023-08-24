@@ -15,12 +15,12 @@
 void buffered_printf(const char *format, ...)
 {
 	char buffer[BUFFER_SIZE];
-	int position = 0;
 	va_list argms;
+	int chars_written;
 
 	va_start(argms, format);
 
-	int chars_written = vsnprintf(buffer, BUFFER_SIZE, format, argms);
+	chars_written = vsnprintf(buffer, BUFFER_SIZE, format, argms);
 
 	va_end(argms);
 
@@ -29,18 +29,4 @@ void buffered_printf(const char *format, ...)
 		/*Write buffer to output (stdout) */
 		fwrite(buffer, 1, chars_written, stdout);
 	}
-}
-
-/**
- * main - Entry point of the program.
- *
- * This function demonstrates the usgae of the buffered_printf function
- * Return: Always 0.
- */
-int main(void)
-{
-	buffered_printf("This is a %s example with %d formatted %s.\n",
-			"buffered", 123, "output");
-	buffered_printf("An unknown specifier: %p\n", (void *)12345);
-	return (0);
 }
