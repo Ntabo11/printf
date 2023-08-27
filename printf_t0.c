@@ -20,22 +20,17 @@ int _printf(const char *format, ...)
 
 	va_list args_list;
 	int count = 0;
-<<<<<<< HEAD
-=======
 	char buffer[BUFSIZ];
 	int buff_ind = 0;
 	char *str, c;
->>>>>>> a7bcf7da3e6642ea0e6f2222d79d957a419dbb9f
-
+	
 	va_start(args_list, format);
 
 	while (*format)
 	{
 		if (*format == '%')
 		{
-<<<<<<< HEAD
 			count += handle_format(&format, args_list);
-=======
 			format++;
 			if (*format == 'c')
 			{
@@ -80,7 +75,6 @@ int _printf(const char *format, ...)
 				}
 				buffer[buff_ind++] = *format;
 			}
->>>>>>> a7bcf7da3e6642ea0e6f2222d79d957a419dbb9f
 		}
 		else
 		{
@@ -98,8 +92,6 @@ int _printf(const char *format, ...)
 	
 	return (count);
 }
-<<<<<<< HEAD
-
 /**
  * handle_format - Handle format specifiers.
  * @format: Format string.
@@ -184,7 +176,6 @@ int handle_unknown_format(char specifier)
 	unknown[0] = specifier;
 	unknown[1] = '\0';
 	return (write(1, unknown, 1));
-=======
 /**
  * _print - funct
  * @format: format.
@@ -404,5 +395,4 @@ int handle_print(const char *fmt, int *ind, va_list list, char buffer[],
 		return (unknow_len);
 	}
 	return (printed_chars);
->>>>>>> a7bcf7da3e6642ea0e6f2222d79d957a419dbb9f
 }
